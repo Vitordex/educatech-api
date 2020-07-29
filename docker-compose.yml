@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  database:
+    image: mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_PASSWORD: test
+      MYSQL_USER: master
+      MYSQL_DATABASE: educatech-db

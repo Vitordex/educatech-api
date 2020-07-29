@@ -1,0 +1,60 @@
+{
+  "name": "educatech-api",
+  "version": "0.1.0",
+  "description": "This app is the backend for `desserts, please!` system, a software to post and view recipes and reviews in a simple and effective way.",
+  "main": "src/bin/www.ts",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test-unit": "mocha -r ts-node/register ./test/unit/**/*.ts",
+    "test-integration": "mocha -r ts-node/register ./test/integration/**/*.ts",
+    "tsc": "tsc"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/vitordex/educatech-api.git"
+  },
+  "author": "XD Game Studio",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/vitordex/educatech-api/issues"
+  },
+  "homepage": "https://gitlab.com/vitordex/educatech-api#readme",
+  "dependencies": {
+    "@xdgame-studio/email-service": "1.0.2",
+    "@xdgame-studio/koa-error-handle-middleware": "1.1.0",
+    "@xdgame-studio/koa-route-logger-middleware": "2.0.2",
+    "bcrypt": "3.0.8",
+    "bluebird": "3.5.3",
+    "bunyan": "1.8.12",
+    "config": "3.0.1",
+    "joi": "14.3.1",
+    "jsonwebtoken": "8.5.1",
+    "koa": "2.7.0",
+    "koa-bodyparser": "4.2.1",
+    "koa-router": "7.4.0",
+    "mysql2": "^2.1.0",
+    "sequelize": "^6.3.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^3.0.0",
+    "@types/bunyan": "^1.8.6",
+    "@types/config": "^0.0.34",
+    "@types/joi": "^14.3.2",
+    "@types/jsonwebtoken": "^8.3.2",
+    "@types/koa": "^2.0.48",
+    "@types/koa-bodyparser": "^4.2.2",
+    "@types/koa-router": "^7.0.40",
+    "@types/mocha": "^5.2.6",
+    "@types/sequelize": "^4.28.8",
+    "@types/should": "^13.0.0",
+    "@types/sinon": "^7.5.1",
+    "mocha": "^8.0.1",
+    "node-ts": "^5.0.6",
+    "should": "^13.2.3",
+    "sinon": "^8.1.1",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.6"
+  }
+}

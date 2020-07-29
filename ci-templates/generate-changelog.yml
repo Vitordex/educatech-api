@@ -1,0 +1,27 @@
+.generate_changelog_upm:
+    image: node:lts-alpine3.12
+    variables:
+        TOKEN: ''
+        PACKAGE_JSON_PATH: .
+    only:
+        - /^patch-v.+/
+        - /^minor-v.+/
+        - /^major-v.+/
+    before_script:
+        - apk add --no-cache git sed git-lfs
+        - git config --global user.email "$GITLAB_USER_EMAIL"
+        - git config --global user.name "Job Uploader"
+        - current_dir=$(pwd)
+        - version_type=$(echo $CI_COMMIT_REF_NAME | sed 's/-v.*$//')
+        - export ORIGIN=https://oauth:$TOKEN@gitlab.com/$CI_PROJECT_PATH.git
+    script:
+        - cd $PACKAGE_JSON_PATH
+        - git checkout $CI_COMMIT_REF_NAME
+        - git pull --tags
+        - 'new_version=$(npm version $version_type -m "docs(version): Include new version in file [skip ci]")'
+        - cd $current_dir
+        - npm i -g auto-changelog
+        - 'auto-changelog --ignore-commit-pattern "docs\(version\): Add documentation \[skip ci\]" -o $current_dir/CHANGELOG.md'
+        - git add $current_dir
+        - 'git commit -am "docs(proj): Add documentation [skip ci]"'
+        - git push --tags $ORIGIN HEAD:$CI_COMMIT_REF_NAME

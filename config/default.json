@@ -1,0 +1,21 @@
+{
+    "app": {
+        "port": 3000
+    },
+    "logger": {
+        "name": "educatech-api",
+        "path": "./logs/api.log"
+    },
+    "db": {
+        "connection": {
+            "username": "master", 
+            "password": "test", 
+            "database": "educatech-db", 
+            "host": "localhost",
+            "port": 3306
+        }
+    },
+    "hashing": {
+        "saltRounds": 10
+    }
+}
