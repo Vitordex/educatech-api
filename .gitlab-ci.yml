@@ -1,0 +1,29 @@
+image: node:latest
+
+services:
+  - mysql:latest
+  
+stages:
+  - build
+  - test
+
+install_dependencies:
+  stage: build
+  script:
+   - npm install
+   
+cache:
+  paths:
+  - node_modules/
+
+unit_test:
+  stage: test
+  script:
+   - npm install
+   - npm run test-unit
+
+integration_test:
+  stage: test
+  script:
+   - npm install
+   - npm run test-integration
