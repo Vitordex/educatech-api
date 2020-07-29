@@ -9,7 +9,7 @@
   "scripts": {
     "test-unit": "mocha -r ts-node/register ./test/unit/**/*.ts",
     "test-integration": "mocha -r ts-node/register ./test/integration/**/*.ts",
-    "tsc": "tsc"
+    "build": "tsc"
   },
   "repository": {
     "type": "git",

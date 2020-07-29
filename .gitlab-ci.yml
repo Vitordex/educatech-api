@@ -1,4 +1,4 @@
-image: node:lts-alpine3.9
+image: node:latest
 
 services:
   - mysql:latest
@@ -10,9 +10,11 @@ stages:
 install_dependencies:
   stage: build
   script:
-    - apk add --no-cache python make g++
     - npm install
-    - npm rebuild
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
    
 cache:
   paths:
