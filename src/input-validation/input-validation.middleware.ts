@@ -89,7 +89,7 @@ export class InputValidation {
                 const result = await joi.validate(input, schema);
                 
                 context.input = result;
-                await next();
+                return next();
             } catch (error) {
                 if (!error.details) throw error;
 

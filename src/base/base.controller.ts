@@ -11,7 +11,7 @@ export default class BaseController {
     }
 
     public isValidAndDiferentValue<T>(input: T, persisted: T){
-        return !!input && input !== persisted;
+        return input !== null && input !== undefined && input !== persisted;
     }
 }
 

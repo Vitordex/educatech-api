@@ -23,6 +23,11 @@ import { DatabaseSeed } from './database/database-seed';
 import { AuthorizationMiddleware } from './authorization/authorization.middleware';
 import { DBUserActionService } from './auth/user-actions/db-user-action.service';
 import { DBActionService } from './auth/actions/db-action.service';
+import { DBPatientService } from './patients/db-patient.service';
+import { PatientController } from './patients/patient.controller';
+import { PatientSchema } from './patients/patient.schema';
+import { PatientApi } from './patients/patient.api';
+import { PermissionService } from './authorization/permission.service';
 
 const app = new Koa();
 
@@ -57,16 +62,18 @@ export async function initApp(logger: Logger) {
 
     const userService = new DBUserService(dbContext);
     const roleService = new DBRoleService(dbContext);
-
+    const patientService = new DBPatientService(dbContext);
+    
     const userActionService = new DBUserActionService(dbContext);
     const actionService = new DBActionService(dbContext);
+    const permissionService = new PermissionService(userActionService, actionService);
+
     const userController = new UserController(
         userService,
         jwtService,
         hashingService,
         roleService,
-        userActionService,
-        actionService);
+        permissionService);
     const userSchema = new UserSchema(InputValidation.BaseSchema);
     const userApi = new UserApi(
         userController,
@@ -74,7 +81,6 @@ export async function initApp(logger: Logger) {
         authenticationMiddleware,
         validationMiddleware,
         authorizationMiddleware);
-    userApi.configureRoutes();
     includeRoutes(userApi, app);
 
     const roleController = new RoleController(roleService, userService);
@@ -85,13 +91,23 @@ export async function initApp(logger: Logger) {
         authenticationMiddleware,
         authorizationMiddleware, 
         validationMiddleware);
-    roleApi.configureRoutes();
     includeRoutes(roleApi, app);
+
+    const patientController = new PatientController(patientService, userService, permissionService);
+    const patientSchema = new PatientSchema(InputValidation.BaseSchema);
+    const patientApi = new PatientApi(
+        patientController, 
+        patientSchema, 
+        authenticationMiddleware, 
+        validationMiddleware, 
+        authorizationMiddleware);
+    includeRoutes(patientApi, app);
 
     return app;
 }
 
 function includeRoutes(api: BaseApi, app: Koa) {
+    api.configureRoutes();
     app.use(api.routes);
     app.use(api.allowedMethods);
 }
