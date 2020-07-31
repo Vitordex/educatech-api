@@ -119,6 +119,48 @@ export class DatabaseSeed {
                 methodName: 'listPatientsForUser',
                 created_at: now,
                 updated_at: now
+            },
+            {
+                id: 17,
+                serviceName: 'therapy-sessions',
+                methodName: 'getById',
+                created_at: now,
+                updated_at: now
+            },
+            {
+                id: 18,
+                serviceName: 'therapy-sessions',
+                methodName: 'deleteById',
+                created_at: now,
+                updated_at: now
+            },
+            {
+                id: 19,
+                serviceName: 'therapy-sessions',
+                methodName: 'postTherapySession',
+                created_at: now,
+                updated_at: now
+            },
+            {
+                id: 20,
+                serviceName: 'therapy-sessions',
+                methodName: 'putTherapySession',
+                created_at: now,
+                updated_at: now
+            },
+            {
+                id: 21,
+                serviceName: 'therapy-sessions',
+                methodName: 'listTherapySessions',
+                created_at: now,
+                updated_at: now
+            },
+            {
+                id: 22,
+                serviceName: 'therapy-sessions',
+                methodName: 'listTherapySessionsForUser',
+                created_at: now,
+                updated_at: now
             }
         ], { updateOnDuplicate: ["methodName", "serviceName"] });
 
@@ -153,6 +195,13 @@ export class DatabaseSeed {
         const professionalRoleActionsRaw: IRoleAction[] = [{
             id: count++,
             actionId: 13,
+            resourceRange: '*',
+            roleId: professionalRole.id,
+            created_at: now,
+            updated_at: now
+        }, {
+            id: count++,
+            actionId: 19,
             resourceRange: '*',
             roleId: professionalRole.id,
             created_at: now,

@@ -28,14 +28,16 @@ export class AuthorizationService implements IAuthorizationService {
         let authorized = false;
         userActions.forEach(userAction => {
             const { resourceRange } = userAction;
-            authorized = resourceRange === '*' || resourceRange.includes(resourceId.toString());
+            authorized = authorized || 
+                resourceRange === '*' || resourceRange.includes(resourceId.toString());
         });
 
         if (authorized) return authorized;
 
         roleActions.forEach(roleAction => {
             const { resourceRange } = roleAction;
-            authorized = resourceRange === '*' || resourceRange.includes(resourceId.toString());
+            authorized = authorized || 
+                resourceRange === '*' || resourceRange.includes(resourceId.toString());
         });
 
         return authorized;

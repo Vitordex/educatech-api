@@ -7,10 +7,12 @@ import { IPatientService } from "../services/ipatient.service";
 export class DBPatientService implements IPatientService {
     private Model: typeof Patient;
     private userRelation;
+    private sessionsRelation;
 
     constructor(dbContext: DatabaseContext) {
         this.Model = dbContext.Patient;
         this.userRelation = dbContext.Patient.associations.user;
+        this.sessionsRelation = dbContext.Patient.associations.sessions;
     }
 
 
@@ -78,12 +80,12 @@ export class DBPatientService implements IPatientService {
 
 
     public findByIdIncludeUser(id: number): Promise<IDBPatient | null> {
-        const result = this.Model.findByPk(id, { include: [this.userRelation] });
+        const result = this.Model.findByPk(id, { include: [this.userRelation, this.sessionsRelation] });
         return result;
     }
 
 
     public listIncludeUser(start: number, length: number): IPatient[] | PromiseLike<IPatient[]> {
-        return this.Model.findAll({ limit: length, offset: start, include: [this.userRelation] });
+        return this.Model.findAll({ limit: length, offset: start, include: [this.userRelation, this.sessionsRelation] });
     }
 }

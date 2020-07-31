@@ -42,6 +42,9 @@ export class UserController extends BaseController {
         },{
             methodName: 'listPatientsForUser',
             serviceName: 'patients'
+        },{
+            methodName: 'listTherapySessionsForUser',
+            serviceName: 'therapy-sessions'
         }];
         await this.permissionService.addPermissions(user.id, user.id, operations);
 

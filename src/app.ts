@@ -28,6 +28,10 @@ import { PatientController } from './patients/patient.controller';
 import { PatientSchema } from './patients/patient.schema';
 import { PatientApi } from './patients/patient.api';
 import { PermissionService } from './authorization/permission.service';
+import { TherapySessionController } from './therapy-sessions/therapy-session.controller';
+import { DBTherapySessionService } from './therapy-sessions/db-therapy-session.service';
+import { TherapySessionSchema } from './therapy-sessions/therapy-session.schema';
+import { TherapySessionApi } from './therapy-sessions/therapy-session.api';
 
 const app = new Koa();
 
@@ -102,6 +106,21 @@ export async function initApp(logger: Logger) {
         validationMiddleware, 
         authorizationMiddleware);
     includeRoutes(patientApi, app);
+
+    const therapySessionService = new DBTherapySessionService(dbContext);
+    const therapySessionController = new TherapySessionController(
+        therapySessionService, 
+        userService, 
+        patientService, 
+        permissionService);
+    const therapySessionSchema = new TherapySessionSchema(InputValidation.BaseSchema);
+    const therapySessionApi = new TherapySessionApi(
+        therapySessionController, 
+        therapySessionSchema, 
+        authenticationMiddleware, 
+        validationMiddleware, 
+        authorizationMiddleware);
+    includeRoutes(therapySessionApi, app);
 
     return app;
 }
