@@ -4,6 +4,7 @@ import { IUserAction } from "../user-actions/user-action";
 import { EGender } from "./egender";
 import { IPatient } from "../../patients/patient";
 import { Patient } from "../../patients/patient";
+import { TherapySession } from "../../therapy-sessions/therapy-session";
 
 interface IUserCreationAttributes extends Optional<IUser, "id"> { }
 
@@ -34,6 +35,7 @@ export class User extends Model<IDBUser, IUserCreationAttributes>
   public static associations: {
     role: Association<User, Role>;
     patients: Association<User, Patient>;
+    sessions: Association<User, TherapySession>;
   }
 }
 

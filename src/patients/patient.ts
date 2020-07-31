@@ -7,6 +7,7 @@ import {
 
 import { IUser } from "../auth/users/user";
 import { User } from "../auth/users/user";
+import { TherapySession } from "../therapy-sessions/therapy-session";
 
 interface IPatientCreationAttributes extends Optional<IPatient, "id"> { }
 
@@ -32,6 +33,7 @@ export class Patient extends Model<IDBPatient, IPatientCreationAttributes>
 
   public static associations: {
     user: Association<Patient, User>;
+    sessions: Association<Patient, TherapySession>
   }
 }
 
