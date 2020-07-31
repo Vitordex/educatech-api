@@ -5,18 +5,15 @@ import { IRoleService } from "../../services/irole.service";
 import { IHashingService } from "../../services/ihashing.service";
 import { IUser, IDBUser } from "./user";
 import { IRole } from "../roles/role";
-import { IUserActionService } from "../../services/iuser-action.service";
-import { IUserAction } from "../user-actions/user-action";
-import { IActionService } from "../../services/iaction.service";
-import { IAction } from "../actions/action";
+import { IPermissionService } from "../../authorization/ipermission.service";
+import { IOperation } from "../../authorization/IOperation";
 
 export class UserController extends BaseController {
     constructor(private userService: IUserService,
         private tokenService: ITokenService,
         private hashService: IHashingService,
         private roleService: IRoleService,
-        private userActionService: IUserActionService,
-        private actionService: IActionService
+        private permissionService: IPermissionService
     ) {
         super();
     }
@@ -33,7 +30,20 @@ export class UserController extends BaseController {
             this.throwError(API_STATUS.INTERNAL_ERROR, 'Error creating the user', error);
         }
 
-        await this.addPermissions(["getById", "putUser", "deleteById"], user.id);
+        const operations: IOperation[] = [{
+            methodName: 'getById',
+            serviceName: 'users'
+        },{
+            methodName: 'putUser',
+            serviceName: 'users'
+        },{
+            methodName: 'deleteById',
+            serviceName: 'users'
+        },{
+            methodName: 'listPatientsForUser',
+            serviceName: 'patients'
+        }];
+        await this.permissionService.addPermissions(user.id, user.id, operations);
 
         const token: string | object = await this.generateToken(user.id);
         return { token, user };
@@ -78,7 +88,7 @@ export class UserController extends BaseController {
             this.throwError(API_STATUS.INTERNAL_ERROR, 'Error deleting the user', error);
         }
 
-        await this.removePermissions(id);
+        await this.permissionService.removeAllPermissions(id);
     }
 
     public async postUser(userInput: IUser) {
@@ -93,7 +103,20 @@ export class UserController extends BaseController {
             this.throwError(API_STATUS.INTERNAL_ERROR, 'Error creating the user', error);
         }
 
-        await this.addPermissions(["getById", "putUser", "deleteById"], user.id);
+        const operations: IOperation[] = [{
+            methodName: 'getById',
+            serviceName: 'users'
+        },{
+            methodName: 'putUser',
+            serviceName: 'users'
+        },{
+            methodName: 'deleteById',
+            serviceName: 'users'
+        },{
+            methodName: 'listPatientsForUser',
+            serviceName: 'patients'
+        }];
+        await this.permissionService.addPermissions(user.id, user.id, operations);
 
         return { id: user.id };
     }
@@ -180,34 +203,5 @@ export class UserController extends BaseController {
         }
 
         if (!role) this.throwError(API_STATUS.NOT_FOUND, 'Role sent does not exists');
-    }
-
-    public async addPermissions(methodNames: string[], userId: number) {
-        let actions: IAction[] = [];
-
-        try {
-            actions = await this.actionService.findWithMethodNames(methodNames, 'users');
-        } catch (error) {
-            this.throwError(API_STATUS.INTERNAL_ERROR, 'Error finding actions', error);
-        }
-
-        try {
-            const userActions: IUserAction[] = actions.map((action) => ({
-                id: undefined as any, 
-                userId: userId, 
-                resourceRange: userId.toString(), 
-                actionId: action.id}));
-            await this.userActionService.addUserActions(userActions);
-        } catch (error) {
-            this.throwError(API_STATUS.INTERNAL_ERROR, 'Error adding user permissions');
-        }
-    }
-
-    public async removePermissions(userId: number) {
-        try {
-            await this.userActionService.removeAllByUserId(userId);
-        } catch (error) {
-            this.throwError(API_STATUS.INTERNAL_ERROR, 'Error erasing user permissions');     
-        }
     }
 }

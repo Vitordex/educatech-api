@@ -12,7 +12,6 @@ describe('Base controller Tests', () => {
         it('should return false with empty value', () => {
             baseController.isValidAndDiferentValue(undefined, persistedValue).should.be.false();
             baseController.isValidAndDiferentValue(null, persistedValue).should.be.false();
-            baseController.isValidAndDiferentValue('', persistedValue).should.be.false();
         });
 
         it('should return false with same value', () => {

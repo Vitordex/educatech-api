@@ -1,7 +1,9 @@
-import { Sequelize, ModelAttributes, InitOptions, INTEGER, STRING, DATE } from "sequelize";
-import { User } from "./user";
+import { Sequelize, ModelAttributes, InitOptions, INTEGER, STRING } from "sequelize";
+import { Patient } from "./patient";
+import { DATE } from "sequelize";
+import { BOOLEAN } from "sequelize";
 
-export class UserConfiguration {
+export class PatientConfiguration {
     public static apply(connection: Sequelize): void {
         const fields: ModelAttributes = {
             id: {
@@ -9,28 +11,28 @@ export class UserConfiguration {
                 primaryKey: true,
                 autoIncrement: true
             },
-            email: {
-                type: STRING
-            },
-            password: {
-                type: STRING
-            },
             name: {
                 type: STRING
             },
             birthDay: {
                 type: DATE
             },
-            gender: {
-                type: INTEGER
+            isActive: {
+                type: BOOLEAN
+            },
+            isRegularSchool: {
+                type: BOOLEAN
+            },
+            schoolName: {
+                type: STRING
             }
         };
         const initOptions: InitOptions = {
             sequelize: connection,
-            tableName: 'Users',
+            tableName: 'Patients',
             freezeTableName: true,
             paranoid: true
         };
-        User.init(fields, initOptions);
+        Patient.init(fields, initOptions);
     }
 }

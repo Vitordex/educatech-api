@@ -77,6 +77,48 @@ export class DatabaseSeed {
                 methodName: 'listUsers',
                 created_at: now,
                 updated_at: now
+            },
+            {
+                id: 11,
+                serviceName: 'patients',
+                methodName: 'getById',
+                created_at: now,
+                updated_at: now
+            },
+            {
+                id: 12,
+                serviceName: 'patients',
+                methodName: 'deleteById',
+                created_at: now,
+                updated_at: now
+            },
+            {
+                id: 13,
+                serviceName: 'patients',
+                methodName: 'postPatient',
+                created_at: now,
+                updated_at: now
+            },
+            {
+                id: 14,
+                serviceName: 'patients',
+                methodName: 'putPatient',
+                created_at: now,
+                updated_at: now
+            },
+            {
+                id: 15,
+                serviceName: 'patients',
+                methodName: 'listPatients',
+                created_at: now,
+                updated_at: now
+            },
+            {
+                id: 16,
+                serviceName: 'patients',
+                methodName: 'listPatientsForUser',
+                created_at: now,
+                updated_at: now
             }
         ], { updateOnDuplicate: ["methodName", "serviceName"] });
 
@@ -88,11 +130,11 @@ export class DatabaseSeed {
                 updated_at: now
             }, {
                 id: 2,
-                name: 'Consumer',
+                name: 'Professional',
                 created_at: now,
                 updated_at: now
             }
-        ], { updateOnDuplicate: ["name"] });
+        ], { updateOnDuplicate: ["id"] });
 
         let count = 1;
         const adminRole = roles[0];
@@ -104,8 +146,20 @@ export class DatabaseSeed {
             updated_at: now,
             resourceRange: '*'
         } as IRoleAction));
-        await RoleAction.bulkCreate(adminRoleActionsRaw, 
-            { updateOnDuplicate: ['actionId', 'roleId'] });
+        await RoleAction.bulkCreate(adminRoleActionsRaw,
+            { updateOnDuplicate: ["id"] });
+
+        const professionalRole = roles[1];
+        const professionalRoleActionsRaw: IRoleAction[] = [{
+            id: count++,
+            actionId: 13,
+            resourceRange: '*',
+            roleId: professionalRole.id,
+            created_at: now,
+            updated_at: now
+        }];
+        await RoleAction.bulkCreate(professionalRoleActionsRaw,
+            { updateOnDuplicate: ["id"] });
 
         const hashService = new HashingService();
         await User.bulkCreate([

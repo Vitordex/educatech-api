@@ -2,6 +2,8 @@ import { IRole, Role } from "../roles/role";
 import { Optional, Model, HasOneCreateAssociationMixin, HasOneSetAssociationMixin, Association } from "sequelize";
 import { IUserAction } from "../user-actions/user-action";
 import { EGender } from "./egender";
+import { IPatient } from "../../patients/patient";
+import { Patient } from "../../patients/patient";
 
 interface IUserCreationAttributes extends Optional<IUser, "id"> { }
 
@@ -21,6 +23,8 @@ export class User extends Model<IDBUser, IUserCreationAttributes>
   public role?: IRole;
   public roleId!: number;
 
+  public patients?: IPatient[];
+
   public setRole!: HasOneSetAssociationMixin<IRole, number>;
   public createRole!: HasOneCreateAssociationMixin<IRole>;
 
@@ -29,6 +33,7 @@ export class User extends Model<IDBUser, IUserCreationAttributes>
 
   public static associations: {
     role: Association<User, Role>;
+    patients: Association<User, Patient>;
   }
 }
 
@@ -43,6 +48,8 @@ export interface IUser {
     userActions?: IUserAction[];
     role?: IRole;
     roleId: number;
+
+    patients?: IPatient[]
 
     createdAt: Date;
     updatedAt: Date;

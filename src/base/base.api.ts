@@ -1,5 +1,5 @@
 import Router from "koa-router";
-import { Middleware } from "koa";
+import { Middleware, Context } from "koa";
 import BaseController from "./base.controller";
 import { IOperation } from "../authorization/IOperation";
 
@@ -17,9 +17,10 @@ export default abstract class BaseApi {
     }
 
     protected executionMiddleware(action: Function): Middleware {
-        return async (context, next) => {
+        return async (context: Context, next) => {
             try {
-                context.body = await action(context.input);
+                const user = context.state.user ?? {};
+                context.body = await action(context.input, user.id);
             } catch (error) {
                 throw error;
             }

@@ -4,8 +4,7 @@ import { RouteTests } from "../route.tests";
 import { StubUserService } from "../services-stub/user-stub.service";
 import { StubTokenService } from "../services-stub/token-stub.service";
 import { StubRoleService } from "../services-stub/role-stub.service";
-import { StubActionService } from "../services-stub/action-stub.service";
-import { StubUserActionService } from "../services-stub/user-action-stub.service";
+import { StubPermissionService } from '../services-stub/permission-stub.service';
 import { FunctionUtils } from "../function-utilities";
 
 import sinon from "sinon";
@@ -15,15 +14,13 @@ describe('User controller utilities', () => {
     const tokenService = new StubTokenService();
     const hashService = new HashingService(2);
     const roleService = new StubRoleService();
-    const userActionService = new StubUserActionService();
-    const actionService = new StubActionService();
+    const permissionService = new StubPermissionService();
     const userController = new UserController(
-        userService, 
-        tokenService, 
-        hashService, 
-        roleService, 
-        userActionService, 
-        actionService);
+        userService,
+        tokenService,
+        hashService,
+        roleService,
+        permissionService);
 
     it('should throw not found when role wasn\'t found on db', async () => {
         sinon.stub(roleService, FunctionUtils.nameAsAny(roleService.findById))
@@ -97,51 +94,6 @@ describe('User controller utilities', () => {
             const token = await userController.generateToken(1);
 
             token.should.equal('test-token');
-        });
-    });
-
-    describe('removePermissions method', () => {
-        it('should throw internal error when error was thrown', async () => {
-            sinon.stub(userActionService, FunctionUtils.nameAsAny(userActionService.removeAllByUserId))
-                .rejects();
-
-            try {
-                await userController.removePermissions(1);
-
-                (true).should.equal(false);
-            } catch (error) {
-                RouteTests.testError(500, 'Error erasing user permissions', error);
-            }
-        });
-    });
-
-    describe('addPermissions method', () => {
-        it('should throw internal error when error was thrown', async () => {
-            sinon.stub(actionService, FunctionUtils.nameAsAny(actionService.findWithMethodNames))
-                .rejects();
-
-            try {
-                await userController.addPermissions([''], 1);
-
-                (true).should.equal(false);
-            } catch (error) {
-                RouteTests.testError(500, 'Error finding actions', error);
-            }
-        });
-
-        it('should throw internal error when error was thrown', async () => {
-            sinon.stub(actionService, FunctionUtils.nameAsAny(actionService.findWithMethodNames))
-                .resolves([{id: 1}]);
-            sinon.stub(userActionService, FunctionUtils.nameAsAny(userActionService.addUserActions))
-                .rejects();
-
-            try {
-                await userController.addPermissions([''], 1);
-
-                (true).should.equal(false);
-            } catch (error) {
-                RouteTests.testError(500, 'Error adding user permissions', error);
-            }
         });
     });
 });

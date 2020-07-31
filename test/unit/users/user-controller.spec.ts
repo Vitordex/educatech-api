@@ -4,11 +4,10 @@ import { RouteTests } from "../route.tests";
 import { StubUserService } from "../services-stub/user-stub.service";
 import { StubTokenService } from "../services-stub/token-stub.service";
 import { StubRoleService } from "../services-stub/role-stub.service";
+import { StubPermissionService } from '../services-stub/permission-stub.service';
 import { FunctionUtils } from "../function-utilities";
 
 import sinon from "sinon";
-import { StubUserActionService } from "../services-stub/user-action-stub.service";
-import { StubActionService } from "../services-stub/action-stub.service";
 
 beforeEach(() => {
     sinon.restore();
@@ -19,15 +18,13 @@ describe('User controller api methods', () => {
     const tokenService = new StubTokenService();
     const hashService = new HashingService(2);
     const roleService = new StubRoleService();
-    const userActionService = new StubUserActionService();
-    const actionService = new StubActionService();
+    const permissionService = new StubPermissionService();
     const userController = new UserController(
-        userService, 
-        tokenService, 
-        hashService, 
-        roleService, 
-        userActionService, 
-        actionService);
+        userService,
+        tokenService,
+        hashService,
+        roleService,
+        permissionService);
 
     describe('Post Register method', () => {
         it('should return a user with a token when valid', async () => {
@@ -39,8 +36,8 @@ describe('User controller api methods', () => {
             sinon.stub(userService, FunctionUtils.nameAsAny(userService.findByEmail))
                 .returns(null);
             const addPermissionsStub = sinon.stub(
-                userController, 
-                FunctionUtils.nameAsAny(userController.addPermissions)
+                permissionService,
+                FunctionUtils.nameAsAny(permissionService.addPermissions)
             ).resolves();
 
             const input = { password: 'teste' } as any;
@@ -128,12 +125,12 @@ describe('User controller api methods', () => {
             sinon.stub(userService, FunctionUtils.nameAsAny(userService.deleteById))
                 .resolves();
             const validateStub = sinon.stub(
-                userController, 
+                userController,
                 FunctionUtils.nameAsAny(userController.validateUserExists)
             ).resolves();
             const removePermissionsStub = sinon.stub(
-                userController, 
-                FunctionUtils.nameAsAny(userController.removePermissions)
+                permissionService,
+                FunctionUtils.nameAsAny(permissionService.removeAllPermissions)
             ).resolves();
 
             await userController.deleteById(1);
@@ -145,10 +142,10 @@ describe('User controller api methods', () => {
 
     describe('List Users method', () => {
         it('should return a valid list of users and count', async () => {
-            const user: any = {id: 2, roleId: 3};
+            const user: any = { id: 2, roleId: 3 };
             sinon.stub(userService, FunctionUtils.nameAsAny(userService.listIncludeRole))
                 .resolves([user, user]);
-            sinon .stub(userService, FunctionUtils.nameAsAny(userService.count))
+            sinon.stub(userService, FunctionUtils.nameAsAny(userService.count))
                 .resolves(2);
 
             const result = await userController.listUsers();
@@ -169,8 +166,8 @@ describe('User controller api methods', () => {
             const validateEmailStub = FunctionUtils.stubMethod(userController, userController.validateUserWithSameEmail)
                 .returns(null);
             const addPermissionsStub = sinon.stub(
-                userController, 
-                FunctionUtils.nameAsAny(userController.addPermissions)
+                permissionService,
+                FunctionUtils.nameAsAny(permissionService.addPermissions)
             ).resolves();
 
             sinon.stub(userService, FunctionUtils.nameAsAny(userService.create))
@@ -191,14 +188,14 @@ describe('User controller api methods', () => {
 
     describe('Put User method', () => {
         it('should update user values', async () => {
-            const user = {id: 1, roleId: 4, password: '12345678', email: 'alodky', name: 'riso', gender: 0, birthDay: new Date(1950, 12, 12)};
+            const user = { id: 1, roleId: 4, password: '12345678', email: 'alodky', name: 'riso', gender: 0, birthDay: new Date(1950, 12, 12) };
             const validateUserStub = FunctionUtils.stubMethod(userController, userController.validateUserExists)
                 .resolves(user);
             const validateRoleStub = FunctionUtils.stubMethod(userController, userController.validateRoleExists)
                 .resolves();
             const validateEmailStub = FunctionUtils.stubMethod(userController, userController.validateUserWithSameEmail)
                 .returns(null);
-                
+
             sinon.stub(userService, FunctionUtils.nameAsAny(userService.updateUser))
                 .returns(null);
 
@@ -219,14 +216,14 @@ describe('User controller api methods', () => {
         });
 
         it('should not update user values', async () => {
-            const user = {id: 1, roleId: 4, password: 'teste', email: 'alodki', name: 'risos'};
+            const user = { id: 1, roleId: 4, password: 'teste', email: 'alodki', name: 'risos' };
             const validateUserStub = FunctionUtils.stubMethod(userController, userController.validateUserExists)
                 .resolves(user);
             const validateRoleStub = FunctionUtils.stubMethod(userController, userController.validateRoleExists)
                 .resolves();
             const validateEmailStub = FunctionUtils.stubMethod(userController, userController.validateUserWithSameEmail)
                 .returns(null);
-                
+
             sinon.stub(userService, FunctionUtils.nameAsAny(userService.updateUser))
                 .returns(null);
 
