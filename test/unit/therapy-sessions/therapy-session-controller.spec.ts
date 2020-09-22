@@ -22,7 +22,7 @@ describe('TherapySession controller api methods', () => {
 
     describe('Get TherapySession by Id method', () => {
         it('should throw not found when invalid id', async () => {
-            sinon.stub(therapySessionService, FunctionUtils.nameAsAny(therapySessionService.findByIdIncludeUser))
+            sinon.stub(therapySessionService, FunctionUtils.nameAsAny(therapySessionService.findById))
                 .resolves(null);
 
             try {
@@ -35,7 +35,7 @@ describe('TherapySession controller api methods', () => {
         });
 
         it('should return a valid therapySession', async () => {
-            sinon.stub(therapySessionService, FunctionUtils.nameAsAny(therapySessionService.findByIdIncludeUser))
+            sinon.stub(therapySessionService, FunctionUtils.nameAsAny(therapySessionService.findById))
                 .resolves({ id: 1 });
 
             const result = await therapySessionController.getById(1);

@@ -1,7 +1,4 @@
-image: node:latest
-
-services:
-  - mysql:latest
+image: node:lts-alpine3.11
   
 stages:
   - build

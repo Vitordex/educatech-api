@@ -25,7 +25,7 @@
     "@xdgame-studio/email-service": "1.0.2",
     "@xdgame-studio/koa-error-handle-middleware": "1.1.0",
     "@xdgame-studio/koa-route-logger-middleware": "2.0.2",
-    "bcrypt": "3.0.8",
+    "bcryptjs": "2.4.3",
     "bluebird": "3.5.3",
     "bunyan": "1.8.12",
     "config": "3.0.1",
