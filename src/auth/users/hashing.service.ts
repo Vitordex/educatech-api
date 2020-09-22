@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { IHashingService } from '../../services/ihashing.service';
 
 export class HashingService implements IHashingService {
