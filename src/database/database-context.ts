@@ -50,13 +50,13 @@ export class DatabaseContext {
         UserAction.belongsTo(Action, { as: 'action', foreignKey: 'actionId' });
         UserAction.belongsTo(User, { as: 'user', foreignKey: 'userId' });
 
-        User.hasMany(Patient, { as: 'patients', foreignKey: 'patientId' });
+        User.hasMany(Patient, { as: 'patients', foreignKey: 'userId' });
         Patient.belongsTo(User, { as: 'user', foreignKey: 'userId' });
 
-        User.hasMany(TherapySession, {as: 'sessions', foreignKey: 'userId'});
-        TherapySession.belongsTo(User, {as: 'user', foreignKey: 'userId'});
-        
-        Patient.hasMany(TherapySession, {as: 'sessions', foreignKey: 'patientId'});
-        TherapySession.belongsTo(Patient, {as: 'patient', foreignKey: 'patientId'});
+        User.hasMany(TherapySession, { as: 'sessions', foreignKey: 'userId' });
+        TherapySession.belongsTo(User, { as: 'user', foreignKey: 'userId' });
+
+        Patient.hasMany(TherapySession, { as: 'sessions', foreignKey: 'patientId' });
+        TherapySession.belongsTo(Patient, { as: 'patient', foreignKey: 'patientId' });
     }
 }
