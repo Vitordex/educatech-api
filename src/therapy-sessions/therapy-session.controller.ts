@@ -23,7 +23,7 @@ export class TherapySessionController extends BaseController {
     public async getById(id: number): Promise<ITherapySession> {
         let therapySession;
         try {
-            therapySession = await this.therapySessionService.findByIdIncludeUser(id);
+            therapySession = await this.therapySessionService.findById(id);
         } catch (error) {
             ApiFunctions.throwError(API_STATUS.INTERNAL_ERROR, 'Error getting the therapy session by id', error);
         }
