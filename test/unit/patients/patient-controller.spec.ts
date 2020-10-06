@@ -20,7 +20,7 @@ describe('Patient controller api methods', () => {
 
     describe('Get Patient by Id method', () => {
         it('should throw not found when invalid id', async () => {
-            sinon.stub(patientService, FunctionUtils.nameAsAny(patientService.findByIdIncludeUser))
+            sinon.stub(patientService, FunctionUtils.nameAsAny(patientService.findById))
                 .resolves(null);
 
             try {
@@ -33,7 +33,7 @@ describe('Patient controller api methods', () => {
         });
 
         it('should return a valid patient', async () => {
-            sinon.stub(patientService, FunctionUtils.nameAsAny(patientService.findByIdIncludeUser))
+            sinon.stub(patientService, FunctionUtils.nameAsAny(patientService.findById))
                 .resolves({ id: 1 });
 
             const result = await patientController.getById(1);

@@ -60,6 +60,9 @@ export class TherapySessionController extends BaseController {
         const operations: IOperation[] = [{
             methodName: 'getById',
             serviceName: 'therapy-sessions'
+        },{
+            methodName: 'putTherapySession',
+            serviceName: 'therapy-sessions'
         }];
         await this.permissionService.addPermissions(userId, therapySession.id, operations);
 

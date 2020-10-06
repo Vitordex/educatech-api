@@ -20,7 +20,7 @@ export class PatientController extends BaseController {
     public async getById(id: number): Promise<IPatient> {
         let patient;
         try {
-            patient = await this.patientService.findByIdIncludeUser(id);
+            patient = await this.patientService.findById(id);
         } catch (error) {
             ApiFunctions.throwError(API_STATUS.INTERNAL_ERROR, 'Error getting the patient by id', error);
         }
