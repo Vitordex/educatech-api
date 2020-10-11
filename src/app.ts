@@ -7,6 +7,7 @@ import { AuthenticationMiddleware, TOKEN_LOCATION } from './authentication/authe
 import { JwtService } from './authentication/jwt.service';
 import { DBUserService } from "./auth/users/db-user.service";
 import { HashingService } from "./auth/users/hashing.service";
+import { EmailService } from './email-service/email.service';
 import { UserController } from './auth/users/user.controller';
 import { UserApi } from './auth/users/user.api';
 import { UserSchema } from './auth/users/user.schema';
@@ -81,13 +82,15 @@ export async function initApp(logger: Logger) {
     const userActionService = new DBUserActionService(dbContext);
     const actionService = new DBActionService(dbContext);
     const permissionService = new PermissionService(userActionService, actionService);
+    const emailService = new EmailService("test-user@test.com", "testPassword", "smtp.test.com", 465, "Test Educatech");
 
     const userController = new UserController(
         userService,
         jwtService,
         hashingService,
         roleService,
-        permissionService);
+        permissionService,
+        emailService);
     const userSchema = new UserSchema(InputValidation.BaseSchema);
     const userApi = new UserApi(
         userController,
