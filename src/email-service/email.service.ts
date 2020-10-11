@@ -30,6 +30,6 @@ export class EmailService implements IEmailService {
     }
 }
 
-interface IEmailService {
+export interface IEmailService {
     sendEmail(recipient: string, subject: string, emailBody: string): Promise<any>
 }
