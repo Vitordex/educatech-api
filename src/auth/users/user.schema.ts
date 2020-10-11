@@ -56,6 +56,9 @@ export class UserSchema extends BaseSchema {
                     gender: joi.number().min(0).max(2),
                     birthDay: joi.date().min(new Date(1900, 1, 1))
                 }).required()
+            }),
+            putForgotPassword: this.generateSchema({
+                headers: this.queryAuthSchema()
             })
         };
     }

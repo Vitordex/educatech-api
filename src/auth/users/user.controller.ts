@@ -7,13 +7,15 @@ import { IUser, IDBUser } from "./user";
 import { IRole } from "../roles/role";
 import { IPermissionService } from "../../authorization/ipermission.service";
 import { IOperation } from "../../authorization/IOperation";
+import { IEmailService } from "../../email-service/email.service";
 
 export class UserController extends BaseController {
     constructor(private userService: IUserService,
         private tokenService: ITokenService,
         private hashService: IHashingService,
         private roleService: IRoleService,
-        private permissionService: IPermissionService
+        private permissionService: IPermissionService,
+        private emailService: IEmailService
     ) {
         super();
     }
@@ -162,6 +164,26 @@ export class UserController extends BaseController {
         }
 
         return { result: users, count };
+    }
+
+    public async putForgotPassword(userId: number) {
+        let user;
+        try {
+            user = await this.userService.findByIdIncludeRole(userId);
+        } catch (error) {
+            this.throwError(API_STATUS.INTERNAL_ERROR, 'Error getting the user by id', error);
+        }
+
+        if (!user) this.throwError(API_STATUS.NOT_FOUND, 'User not found');
+
+        try {
+            const token = await this.generateToken(userId);
+            await this.emailService.sendEmail(user.email, 
+                'Esqueci a senha EducaTech', 
+                `Houve uma solicitação de troca de senha para a sua conta. Se não foi você quem pediu, favor desconsidere o e-mail.<br/>Se foi você, favor clique no botão abaixo para recuperar sua senha:<br/><button><a href="${token}">Recuperar senha</a></button>`);
+        } catch(error) {
+            this.throwError(API_STATUS.INTERNAL_ERROR, 'Error sending email to user', error);
+        }
     }
 
     public async generateToken(userId: number) {

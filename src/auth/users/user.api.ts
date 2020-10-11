@@ -66,5 +66,12 @@ export class UserApi extends BaseApi {
             this.authorizationMiddleware.authorize('params.id', this.getOperation('putUser')),
             this.executionMiddleware(({ body: userInput, params: { id } }) => this.controller.putUser(id, userInput))
         );
+
+        this.router.put(
+            '/v1/forgot/password',
+            this.validationMiddleware.validate(this.userSchema.schemas.putForgotPassword),
+            this.authMiddleware.authenticate(),
+            this.executionMiddleware((_, userId) => this.controller.putForgotPassword(userId))
+        )
     }
 }
