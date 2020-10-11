@@ -53,6 +53,16 @@ export async function initApp(logger: Logger) {
     const dbContext = await configureDatabase();
 
     app.use(bodyParser());
+    app.use(async (context, next) => {
+        await next();
+        if(context.body){
+            if(context.body.user && context.body.user.password)
+                context.body.user.password = "*****";
+            if(context.body.password)
+                context.body.password = "*****"
+        }
+
+    });
     app.use(RouteLoggerMiddleware(logger));
     app.use(ErrorHandleMiddleware(logger));
 

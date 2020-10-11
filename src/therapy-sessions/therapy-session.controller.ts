@@ -66,7 +66,7 @@ export class TherapySessionController extends BaseController {
         }];
         await this.permissionService.addPermissions(userId, therapySession.id, operations);
 
-        return { id: therapySession.id };
+        return therapySession;
     }
 
     public async putTherapySession(id: number, therapySessionInput: ITherapySession) {
@@ -88,6 +88,8 @@ export class TherapySessionController extends BaseController {
         } catch (error) {
             ApiFunctions.throwError(API_STATUS.INTERNAL_ERROR, 'Error updating the therapy session', error);
         }
+
+        return therapySession;
     }
 
     public async listTherapySessions(start: number = 0, length: number = 10) {

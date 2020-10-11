@@ -121,7 +121,7 @@ export class UserController extends BaseController {
         }];
         await this.permissionService.addPermissions(user.id, user.id, operations);
 
-        return { id: user.id };
+        return user;
     }
 
     public async putUser(id: number, userInput: IUser) {
@@ -147,6 +147,8 @@ export class UserController extends BaseController {
         } catch (error) {
             this.throwError(API_STATUS.INTERNAL_ERROR, 'Error updating the user', error);
         }
+
+        return user;
     }
 
     public async listUsers(start: number = 0, length: number = 10) {
