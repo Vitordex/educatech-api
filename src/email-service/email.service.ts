@@ -26,7 +26,15 @@ export class EmailService implements IEmailService {
         //     html: emailBody
         // });
 
-        return Promise.resolve(this.accountHost + this.accountSenderName + this.accountPort + this.accountUser + this.accountPassword);
+        return Promise.resolve(
+            this.accountHost + 
+            this.accountSenderName + 
+            this.accountPort + 
+            this.accountUser + 
+            this.accountPassword +
+            recipient +
+            subject +
+            emailBody);
     }
 }
 
