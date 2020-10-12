@@ -5,6 +5,7 @@ import { StubUserService } from "../services-stub/user-stub.service";
 import { StubTokenService } from "../services-stub/token-stub.service";
 import { StubRoleService } from "../services-stub/role-stub.service";
 import { StubPermissionService } from '../services-stub/permission-stub.service';
+import { StubEmailService } from '../services-stub/email-stub.service';
 import { FunctionUtils } from "../function-utilities";
 
 import sinon from "sinon";
@@ -15,12 +16,14 @@ describe('User controller utilities', () => {
     const hashService = new HashingService(2);
     const roleService = new StubRoleService();
     const permissionService = new StubPermissionService();
+    const emailService = new StubEmailService();
     const userController = new UserController(
         userService,
         tokenService,
         hashService,
         roleService,
-        permissionService);
+        permissionService,
+        emailService);
 
     it('should throw not found when role wasn\'t found on db', async () => {
         sinon.stub(roleService, FunctionUtils.nameAsAny(roleService.findById))

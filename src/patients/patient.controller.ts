@@ -66,7 +66,7 @@ export class PatientController extends BaseController {
         }];
         await this.permissionService.addPermissions(userId, patient.id, operations);
 
-        return { id: patient.id };
+        return patient;
     }
 
     public async putPatient(id: number, patientInput: IPatient) {
@@ -92,6 +92,8 @@ export class PatientController extends BaseController {
         } catch (error) {
             ApiFunctions.throwError(API_STATUS.INTERNAL_ERROR, 'Error updating the patient', error);
         }
+
+        return patient;
     }
 
     public async listPatients(start: number = 0, length: number = 10) {
