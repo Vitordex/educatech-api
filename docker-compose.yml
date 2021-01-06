@@ -4,9 +4,7 @@ services:
     image: mysql
     restart: always
     volumes:
-      - type: volume
-        source: /home/opc/database
-        target: /var/lib/mysql
+      - /home/opc/database:/var/lib/mysql
     ports:
       - "3306:3306"
     environment:
